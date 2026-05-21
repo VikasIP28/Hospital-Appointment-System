@@ -1,0 +1,80 @@
+# ===========================================
+# Notification Service Configuration
+# ===========================================
+# This service consumes Kafka events from the appointment-service
+# and sends email notifications to patients about their appointments.
+
+server:
+  port: 8083
+
+spring:
+  application:
+    name: notification-service
+
+  # MongoDB Configuration
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/notification_db
+
+  # Kafka Consumer Configuration
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: notification-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: '*'
+        spring.json.type.mapping: appointmentEvent:com.hospital.notification.kafka.event.AppointmentEvent
+
+  # Email (Spring Mail) Configuration
+  # NOTE: Replace with your actual SMTP credentials before enabling email sending.
+  # For Gmail, generate an App Password at https://myaccount.google.com/apppasswords
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: your-email@gmail.com
+    password: ${PASS}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+# Notification-specific settings
+notification:
+  email:
+    # Set to true ONLY after configuring valid SMTP credentials above.
+    # When false, emails are logged but not actually sent (safe for local dev).
+    enabled: false
+
+# JWT Configuration (shared across all microservices)
+jwt:
+  secret: ${JWT}
+  expiration: 86400000
+
+# Actuator Endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    com.hospital.notification: DEBUG
+    org.springframework.kafka: INFO
+    org.springframework.data.mongodb: INFO
+    org.springframework.mail: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

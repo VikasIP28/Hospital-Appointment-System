@@ -1,0 +1,1045 @@
+{
+  "info": {
+    "name": "Hospital Appointment System",
+    "description": "Complete Postman collection for testing the Hospital Appointment System microservices. Includes authentication, appointment management, doctor management, notifications, and admin endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "gateway_url",
+      "value": "http://localhost:8080/api"
+    },
+    {
+      "key": "admin_token",
+      "value": ""
+    },
+    {
+      "key": "doctor_token",
+      "value": ""
+    },
+    {
+      "key": "patient_token",
+      "value": ""
+    },
+    {
+      "key": "doctor_id",
+      "value": ""
+    },
+    {
+      "key": "appointment_id",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "1.1 Register Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"System Admin\",\n  \"email\": \"admin@hospital.com\",\n  \"password\": \"admin123\",\n  \"role\": \"ADMIN\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/auth/register",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set('admin_token', jsonData.token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "1.2 Register Doctor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dr. John Smith\",\n  \"email\": \"dr.john@hospital.com\",\n  \"password\": \"doctor123\",\n  \"role\": \"DOCTOR\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/auth/register",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set('doctor_token', jsonData.token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "1.3 Register Patient",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Doe\",\n  \"email\": \"jane.doe@email.com\",\n  \"password\": \"patient123\",\n  \"role\": \"PATIENT\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/auth/register",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set('patient_token', jsonData.token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "1.4 Login Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@hospital.com\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/auth/login",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set('admin_token', jsonData.token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "1.5 Login Doctor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"dr.john@hospital.com\",\n  \"password\": \"doctor123\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/auth/login",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set('doctor_token', jsonData.token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "1.6 Login Patient",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"jane.doe@email.com\",\n  \"password\": \"patient123\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/auth/login",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set('patient_token', jsonData.token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "1.7 Validate Token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway_url}}/auth/validate?token={{admin_token}}",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "auth",
+                "validate"
+              ],
+              "query": [
+                {
+                  "key": "token",
+                  "value": "{{admin_token}}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Doctor Management",
+      "item": [
+        {
+          "name": "2.1 Create Doctor Profile",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{doctor_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dr. John Smith\",\n  \"specialization\": \"CARDIOLOGY\",\n  \"email\": \"dr.john@hospital.com\",\n  \"phone\": \"+1-555-0101\",\n  \"availability\": true\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/doctors",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "doctors"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set('doctor_id', jsonData.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "2.2 Get All Doctors",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway_url}}/doctors",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "doctors"
+              ]
+            }
+          }
+        },
+        {
+          "name": "2.3 Get Doctor By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway_url}}/doctors/{{doctor_id}}",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "doctors",
+                "{{doctor_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "2.4 Check Doctor Availability",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway_url}}/doctors/availability/{{doctor_id}}",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "doctors",
+                "availability",
+                "{{doctor_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "2.5 Simulate Slow Response",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway_url}}/doctors/simulate/slow",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "doctors",
+                "simulate",
+                "slow"
+              ]
+            }
+          }
+        },
+        {
+          "name": "2.6 Simulate Service Failure",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway_url}}/doctors/simulate/failure",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "doctors",
+                "simulate",
+                "failure"
+              ]
+            }
+          }
+        },
+        {
+          "name": "2.7 Simulate Random Failure",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{gateway_url}}/doctors/simulate/random",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "doctors",
+                "simulate",
+                "random"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Appointment Management",
+      "item": [
+        {
+          "name": "3.1 Create Appointment (Patient)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{patient_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patientName\": \"Jane Doe\",\n  \"patientEmail\": \"jane.doe@email.com\",\n  \"doctorId\": \"{{doctor_id}}\",\n  \"appointmentDate\": \"2026-06-15T10:00:00\",\n  \"symptoms\": \"Chest pain and shortness of breath\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/appointments/create",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "appointments",
+                "create"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set('appointment_id', jsonData.id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "3.2 Get All Appointments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{patient_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/appointments/get",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "appointments",
+                "get"
+              ]
+            }
+          }
+        },
+        {
+          "name": "3.3 Get Appointment By ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{patient_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/appointments/{{appointment_id}}",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "appointments",
+                "{{appointment_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "3.4 Get Pending Appointments (Doctor)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{doctor_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/appointments/doctor/{{doctor_id}}/pending",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "appointments",
+                "doctor",
+                "{{doctor_id}}",
+                "pending"
+              ]
+            }
+          }
+        },
+        {
+          "name": "3.5 Confirm Appointment (Doctor)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{doctor_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/appointments/{{appointment_id}}/confirm",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "appointments",
+                "{{appointment_id}}",
+                "confirm"
+              ]
+            }
+          }
+        },
+        {
+          "name": "3.6 Reject Appointment (Doctor)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{doctor_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/appointments/{{appointment_id}}/reject",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "appointments",
+                "{{appointment_id}}",
+                "reject"
+              ]
+            }
+          }
+        },
+        {
+          "name": "3.7 Cancel Appointment (Patient)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{patient_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/appointments/{{appointment_id}}/cancel",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "appointments",
+                "{{appointment_id}}",
+                "cancel"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Notifications",
+      "item": [
+        {
+          "name": "4.1 Get All Notifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{patient_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/notifications",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "notifications"
+              ]
+            }
+          }
+        },
+        {
+          "name": "4.2 Get Notifications by Appointment",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{patient_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/notifications/appointment/{{appointment_id}}",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "notifications",
+                "appointment",
+                "{{appointment_id}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Admin Endpoints",
+      "item": [
+        {
+          "name": "5.1 System Health",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/admin/system/health",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "admin",
+                "system",
+                "health"
+              ]
+            }
+          }
+        },
+        {
+          "name": "5.2 Circuit Breaker States",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/admin/system/circuit-breakers",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "admin",
+                "system",
+                "circuit-breakers"
+              ]
+            }
+          }
+        },
+        {
+          "name": "5.3 Retry Metrics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/admin/system/retries",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "admin",
+                "system",
+                "retries"
+              ]
+            }
+          }
+        },
+        {
+          "name": "5.4 Appointment Analytics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/admin/analytics/appointments",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "admin",
+                "analytics",
+                "appointments"
+              ]
+            }
+          }
+        },
+        {
+          "name": "5.5 Doctor Analytics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/admin/analytics/doctors",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "admin",
+                "analytics",
+                "doctors"
+              ]
+            }
+          }
+        },
+        {
+          "name": "5.6 Admin - All Notifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/admin/notifications",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "admin",
+                "notifications"
+              ]
+            }
+          }
+        },
+        {
+          "name": "5.7 Admin - Failed Notifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/admin/notifications/failed",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "admin",
+                "notifications",
+                "failed"
+              ]
+            }
+          }
+        },
+        {
+          "name": "5.8 Admin - Resend Failed Notification",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/admin/notifications/NOTIFICATION_ID_HERE/resend",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "admin",
+                "notifications",
+                "NOTIFICATION_ID_HERE",
+                "resend"
+              ]
+            }
+          }
+        },
+        {
+          "name": "5.9 Admin - Notification Report",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/admin/notifications/report",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "admin",
+                "notifications",
+                "report"
+              ]
+            }
+          }
+        },
+        {
+          "name": "5.10 Kafka Events",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/admin/kafka/events",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "admin",
+                "kafka",
+                "events"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Failure Testing",
+      "item": [
+        {
+          "name": "6.1 Create Appointment (Doctor Service Down)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{patient_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patientName\": \"Test Patient\",\n  \"patientEmail\": \"test@email.com\",\n  \"doctorId\": \"nonexistent-doctor-id\",\n  \"appointmentDate\": \"2026-07-01T14:00:00\",\n  \"symptoms\": \"Testing circuit breaker\"\n}"
+            },
+            "url": {
+              "raw": "{{gateway_url}}/appointments/create",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "appointments",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "6.2 Check Circuit Breaker After Failures",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{admin_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{gateway_url}}/admin/system/circuit-breakers",
+              "host": [
+                "{{gateway_url}}"
+              ],
+              "path": [
+                "admin",
+                "system",
+                "circuit-breakers"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Actuator Health Checks",
+      "item": [
+        {
+          "name": "7.1 Auth Service Health",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8084/actuator/health",
+              "host": [
+                "http://localhost:8084"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
+            }
+          }
+        },
+        {
+          "name": "7.2 Appointment Service Health",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8081/actuator/health",
+              "host": [
+                "http://localhost:8081"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
+            }
+          }
+        },
+        {
+          "name": "7.3 Doctor Service Health",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8082/actuator/health",
+              "host": [
+                "http://localhost:8082"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
+            }
+          }
+        },
+        {
+          "name": "7.4 Notification Service Health",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8083/actuator/health",
+              "host": [
+                "http://localhost:8083"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
+            }
+          }
+        },
+        {
+          "name": "7.5 API Gateway Health",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/actuator/health",
+              "host": [
+                "http://localhost:8080"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

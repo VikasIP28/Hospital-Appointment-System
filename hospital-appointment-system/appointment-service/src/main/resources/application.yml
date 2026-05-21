@@ -1,0 +1,98 @@
+# ============================================================
+# Appointment Service Configuration
+# ============================================================
+server:
+  port: 8081
+
+spring:
+  application:
+    name: appointment-service
+
+  # MongoDB Configuration
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/appointment_db
+
+  # Kafka Producer Configuration
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: appointmentEvent:com.hospital.appointment.kafka.event.AppointmentEvent
+
+# JWT Configuration (shared across all services)
+jwt:
+  secret: ${JWT}
+
+  expiration: 86400000
+
+# Resilience4j Configuration
+resilience4j:
+  circuitbreaker:
+    instances:
+      doctorService:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowType: COUNT_BASED
+        minimumNumberOfCalls: 5
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+
+  retry:
+    instances:
+      doctorService:
+        maxAttempts: 3
+        waitDuration: 2000
+        enableExponentialBackoff: true
+        exponentialBackoffMultiplier: 2
+        retryExceptions:
+          - java.lang.Exception
+
+  timelimiter:
+    instances:
+      doctorService:
+        timeoutDuration: 3s
+        cancelRunningFuture: true
+
+# Actuator / Management Endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,info,circuitbreakers,retries
+  endpoint:
+    health:
+      show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
+
+# Feign Client Configuration
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+
+# Doctor Service URL (Feign target)
+doctor:
+  service:
+    url: http://localhost:8082
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    com.hospital.appointment: DEBUG
+    org.springframework.data.mongodb: INFO
+    org.springframework.kafka: INFO
+    org.springframework.security: INFO
+    io.github.resilience4j: DEBUG
+    org.springframework.cloud.openfeign: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"

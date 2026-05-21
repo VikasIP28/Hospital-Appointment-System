@@ -1,0 +1,60 @@
+# ============================================================================
+# Doctor Service - Application Configuration
+# ============================================================================
+# Port: 8082
+# Database: MongoDB - doctor_db
+# Security: JWT-based authentication (validation only, no user registration)
+# ============================================================================
+
+server:
+  port: 8082
+
+spring:
+  application:
+    name: doctor-service
+
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+
+      discovery:
+        enabled: true
+        register: true
+        service-name: doctor-service
+        prefer-ip-address: true
+
+        health-check-path: /actuator/health
+        health-check-interval: 10s
+
+  # MongoDB Configuration
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: doctor_db
+
+# JWT Configuration - must match auth-service for cross-service token validation
+jwt:
+  secret: ${JWT}
+  expiration: 86400000  # 24 hours in milliseconds
+
+# Actuator Configuration - expose health and info endpoints for monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    com.hospital.doctor: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.data.mongodb: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

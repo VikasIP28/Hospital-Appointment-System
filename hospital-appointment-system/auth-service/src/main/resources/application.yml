@@ -1,0 +1,54 @@
+# ============================================================================
+# Auth Service - Application Configuration
+# ============================================================================
+# This configuration file defines all settings for the Authentication
+# microservice including server port, MongoDB connection, JWT settings,
+# security parameters, and actuator endpoints.
+# ============================================================================
+
+server:
+  port: 8084
+
+spring:
+  application:
+    name: auth-service
+
+  # --- MongoDB Configuration ---
+  # The auth service uses its own dedicated database (auth_db) to store
+  # user credentials, roles, and authentication-related data.
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: auth_db
+      auto-index-creation: true   # Automatically create indexes from @Indexed annotations
+
+# --- JWT Configuration ---
+# These settings control token generation and validation.
+# The secret key is shared across all microservices for token verification.
+jwt:
+  secret: ${JWT}
+
+  expiration: 86400000    # 24 hours in milliseconds
+
+# --- Actuator Configuration ---
+# Expose selected management endpoints for monitoring and health checks.
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,info,circuitbreakers
+  endpoint:
+    health:
+      show-details: always
+
+# --- Logging Configuration ---
+# Fine-grained logging levels for debugging and monitoring.
+logging:
+  level:
+    root: INFO
+    com.hospital.auth: DEBUG
+    org.springframework.security: INFO
+    org.springframework.data.mongodb: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
