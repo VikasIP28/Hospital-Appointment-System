@@ -1,0 +1,29 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    // Spring Boot Web for Filters and ControllerAdvice
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    
+    // AOP for Execution Time logging
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+    // Logback JSON Encoder
+    api 'net.logstash.logback:logstash-logback-encoder:7.4'
+
+    // OpenFeign for Feign Interceptor (optional dependency in the context of the logging module itself)
+    compileOnly 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+    // Spring Security
+    compileOnly 'org.springframework.boot:spring-boot-starter-security'
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
+

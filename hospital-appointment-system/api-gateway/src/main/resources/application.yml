@@ -26,35 +26,42 @@ spring:
           notification-service: http://localhost:8083
 
         routes:
-
           # Auth Service
           - id: auth-service
             uri: http://localhost:8084
             predicates:
-              - Path=/auth/**
+              - Path=/api/auth/**
+            filters:
+              - RewritePath=/api/(?<segment>.*), /$\{segment}
 
           # Appointment Service
           - id: appointment-service
             uri: http://localhost:8081
             predicates:
-              - Path=/appointments/**
+              - Path=/api/appointments/**, /api/admin/system/**, /api/admin/kafka/**
+            filters:
+              - RewritePath=/api/(?<segment>.*), /$\{segment}
 
           # Doctor Service
           - id: doctor-service
             uri: http://localhost:8082
             predicates:
-              - Path=/doctors/**
+              - Path=/api/doctors/**, /api/admin/analytics/doctors
+            filters:
+              - RewritePath=/api/(?<segment>.*), /$\{segment}
 
           # Notification Service
           - id: notification-service
             uri: http://localhost:8083
             predicates:
-              - Path=/notifications/**
+              - Path=/api/notifications/**, /api/admin/notifications/**
+            filters:
+              - RewritePath=/api/(?<segment>.*), /$\{segment}
 
 # --- JWT Configuration ---
 # Shared secret and expiration across all microservices for consistent token validation
 jwt:
-  secret: JWT
+  secret: 9a4f2c8d3b7a1e5f8g9h0i1j2k3l4m5n6o7p8q9r0s1t2u3v4w5x6y7z8a9b0c1d2e3f4g5h6i7j8k9l0m1n2o3p4q5r6s7t8u9v0w1x2y3z4a5b6c7d8e9f0
   expiration: 86400000  # 24 hours in milliseconds
 
 

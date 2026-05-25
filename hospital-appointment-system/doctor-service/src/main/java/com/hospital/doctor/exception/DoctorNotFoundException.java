@@ -1,4 +1,6 @@
 package com.hospital.doctor.exception;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.HttpStatus;
 
 /**
  * ============================================================================
@@ -13,6 +15,7 @@ package com.hospital.doctor.exception;
  * - checkAvailability() when the specified doctor is not found
  * ============================================================================
  */
+@ResponseStatus(HttpStatus.NOT_FOUND)
 public class DoctorNotFoundException extends RuntimeException {
 
     /**

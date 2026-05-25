@@ -50,3 +50,19 @@ out/
 *.rar
 .env
 *.hprof
+logs/
+
+### Secrets and Keys ###
+*.pem
+*.key
+*.jks
+*.p12
+*.pfx
+*secret*.yml
+*secret*.properties
+application-local.yml
+application-local.properties
+
+### OS/Crash Logs ###
+Thumbs.db
+hs_err_pid*

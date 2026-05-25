@@ -1,4 +1,6 @@
 package com.hospital.auth.exception;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.HttpStatus;
 
 /**
  * ============================================================================
@@ -14,6 +16,7 @@ package com.hospital.auth.exception;
  * an HTTP 401 (Unauthorized) response.
  * ============================================================================
  */
+@ResponseStatus(HttpStatus.UNAUTHORIZED)
 public class AuthException extends RuntimeException {
 
     /**

@@ -1,4 +1,6 @@
 package com.hospital.appointment.exception;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.HttpStatus;
 
 /**
  * Exception thrown when an invalid appointment status transition is attempted.
@@ -8,6 +10,7 @@ package com.hospital.appointment.exception;
  *
  * Results in a 400 Bad Request HTTP response via the GlobalExceptionHandler.
  */
+@ResponseStatus(HttpStatus.BAD_REQUEST)
 public class InvalidStatusTransitionException extends RuntimeException {
 
     /**
